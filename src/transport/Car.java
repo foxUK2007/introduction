@@ -1,113 +1,82 @@
 package transport;
 
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-public class Car {
-    private final String brand;
-    private final String model;
-    double engineVolume;
-    String validityInsurance;
-    private final int year;
-    private final String country;
-    String transmission;
+public class Car extends transport {
+    private String color;
+    private double engineVolume;
+    private String transmission;
     private final String bodyType;
-    String registrationNumber;
+    private String registrationNumber;
     private final int seatPlace;
     private boolean isWinterTires;
 
+    private Key key;
 
+    private Insurance insurance;
 
-    public Car(String brand, String model, double engineVolume, String color, int year, String country, String transmission, String bodyType, String registrationNumber, int seatPlace, boolean typeTires) {
-        this.brand = brand;
-        this.model = model;
-        this.engineVolume = engineVolume;
-        this.validityInsurance = color;
-        this.year = year;
-        this.country = country;
-        this.transmission = transmission;
-        this.bodyType = bodyType;
-        this.registrationNumber = registrationNumber;
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Car(String brand, String model, double engineVolume, String color, int year, String country, String transmission, String bodyType, String registrationNumber, int seatPlace, boolean typeTires, Key key, Insurance insurance) {
+        super(brand, model, 0, country, color, 0, null, 0);
+        if (engineVolume == 0) {
+            this.engineVolume = 1.5;
+        } else {
+            this.engineVolume = engineVolume;
+        }
+        if (transmission == null) {
+            this.transmission = "МКПП";
+        } else {
+            this.transmission = transmission;
+        }
+        if (bodyType == null) {
+            this.bodyType = "седан";
+        } else {
+            this.bodyType = bodyType;
+        }
+        if (registrationNumber == null) {
+            this.registrationNumber = "х000хх000";
+        } else {
+            this.registrationNumber = registrationNumber;
+        }
         this.seatPlace = seatPlace;
-        this.isWinterTires = isWinterTires;
+        this.isWinterTires = true;
+        if (key == null) {
+            this.key = new Key();
+        } else {
+            this.key = key;
+        }
+        if (insurance == null) {
+            this.insurance = new Insurance();
+        } else {
+            this.insurance = insurance;
+            this.fuelType = null;
+            this.amountFuel = 0;
+        }
 
     }
-    public class Key{
-        private final String remoteEngineStart;
 
-        private final String keylessEntry;
-
-        public Key(String remoteEngineStart, String keylessEntry) {
-            this.remoteEngineStart = remoteEngineStart;
-            this.keylessEntry = keylessEntry;
-        }
-
-        public String getRemoteEngineStart() {
-
-            return remoteEngineStart;
-        }
-
-        public String getKeylessEntry() {
-            return keylessEntry;
-        }
-
-        @Override
-        public String toString() {
-            return "запуск двигателя: " + getRemoteEngineStart() + " бесключевой доступ: " + getKeylessEntry();
-        }
-    }
-    public class Insurance{
-
-        private final String validityInsurance;
-        private final double costInsurance;
-        private final String numberInsurance;
-
-        public Insurance(String validityInsurance, double costInsurance, String numberInsurance) {
-            this.validityInsurance = validityInsurance;
-            this.costInsurance = costInsurance;
-            this.numberInsurance = numberInsurance;
-        }
-
-        public String getValidityInsurance() {
-            if (Car.this.validityInsurance == null || !Car.this.validityInsurance.isEmpty() || !Car.this.validityInsurance.isBlank()) {
-                Car.this.validityInsurance = validityInsurance;
-
-            } else {
-                Car.this.validityInsurance = "Срок действия страховки заканчивается";
-            }
-
-            return validityInsurance;
-        }
-
-        public double getCostInsurance() {
-            return costInsurance;
-        }
-
-        public String getNumberInsurance() {
-            return numberInsurance;
-        }
-
-        public boolean checkNumber (String numberInsurance){
-            if (Pattern.matches("[а-я][0-9]{3}[а-я]{9}", numberInsurance)) {
-                numberInsurance = numberInsurance;
-            } else {
-                System.out.println("000000000");
-            }
-            return false;
-        }
+    public Car(String brand, String model, double engineVolume, String color, int year, String country, String registrationNumber, String fuelType, double amountFuel) {
+        super(brand, model, 0, null, 0, "бензин", 50);
+        this.engineVolume = 2.0;
+        this.color = "белый";
+        this.transmission = "МКПП";
+        this.bodyType = "седан";
+        this.registrationNumber = registrationNumber;
+        this.seatPlace = 5;
+        new Key();
+        new Insurance();
+        this.fuelType = "бензин";
+        this.amountFuel = 50;
 
 
-        @Override
-        public String toString() {
-            return "срок действия страховки: " + getValidityInsurance() + ". стоимость страховки: " + getCostInsurance() + ". номер страховки: " + getNumberInsurance();
-        }
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getModel() {
-        return model;
     }
 
     public double getEngineVolume() {
@@ -119,16 +88,11 @@ public class Car {
 
     public void setEngineVolume(double engineVolume) {
         if (engineVolume == 0) {
-            System.out.println("Информация не указана");
+            this.engineVolume = 1.5;
         } else {
             this.engineVolume = engineVolume;
         }
 
-    }
-
-    public String getValidityInsurance() {
-
-        return validityInsurance;
     }
 
     public String getTransmission() {
@@ -151,15 +115,6 @@ public class Car {
         return isWinterTires;
     }
 
-    public void setValidityInsurance(String validityInsurance) {
-        if (validityInsurance == null || validityInsurance.isEmpty() || validityInsurance.isBlank()) {
-            this.validityInsurance = validityInsurance;
-
-        } else {
-            this.validityInsurance = "белый";
-        }
-    }
-
     public void setWinterTires(boolean winterTires) {
         isWinterTires = winterTires;
     }
@@ -168,7 +123,7 @@ public class Car {
         this.transmission = transmission;
     }
 
-    public static void setRegistrationNumber(String registrationNumber) {
+    public void setRegistrationNumber(String registrationNumber) {
         if (Pattern.matches("[а-я][0-9]{3}[а-я]{2}", registrationNumber)) {
             registrationNumber = registrationNumber;
         } else {
@@ -177,29 +132,109 @@ public class Car {
 
     }
 
-    public void switchTires() {
-        setWinterTires(!this.isWinterTires);
+    public void changeTires() {
+        isWinterTires = !isWinterTires;
     }
 
-    public int getYear() {
-        if (year <= 0) {
-            return 2000;
+
+    public Key getKey() {
+        return new Key();
+    }
+
+    public void setKey(Key key) {
+        this.key = key;
+    }
+
+    public Insurance getInsurance() {
+        return new Insurance();
+    }
+
+    public void setInsurance(Insurance insurance) {
+        this.insurance = insurance;
+    }
+
+    public class Key {
+        private final boolean remoteEngineStart;
+
+        private final boolean keylessEntry;
+
+        public Key(boolean remoteEngineStart, boolean keylessEntry) {
+            this.remoteEngineStart = remoteEngineStart;
+            this.keylessEntry = keylessEntry;
         }
-        return year;
-    }
 
-    public String getCountry() {
-        if (country == null) {
-            return "гаражная сборка";
+        public Key() {
+            this(true, true);
         }
-        return country;
+
+        public boolean isRemoteEngineStart() {
+            return true;
+        }
+
+        public boolean isKeylessEntry() {
+            return true;
+        }
+
     }
 
 
-    @Override
-    public String toString() {
-        return "Марка автомобиля " + getBrand() + ". Модель: " + getModel() + ". Объем двигателя: " + getEngineVolume() + ". Цвет " + getValidityInsurance() + ". " + getCountry() + ". Коробка передач: " + getTransmission() + ". тип кузова: " + getBodyType() + ". регистрационный номер: " + getRegistrationNumber() + ". количество мест: " + getSeatPlace();
-    }
+    public class Insurance {
 
+        private final LocalDate validityInsurance;
+        private final double costInsurance;
+        private final String numberInsurance;
+
+        public Insurance(LocalDate validityInsurance, double costInsurance, String numberInsurance) {
+            if (validityInsurance == null) {
+                this.validityInsurance = LocalDate.now();
+            } else {
+                this.validityInsurance = validityInsurance;
+            }
+            this.costInsurance = costInsurance;
+            if (numberInsurance == null) {
+                this.numberInsurance = "000000000";
+            } else {
+                this.numberInsurance = numberInsurance;
+            }
+        }
+
+        public Insurance() {
+            this(LocalDate.now(), 2500, "985632471");
+        }
+
+        public LocalDate getValidityInsurance() {
+            return validityInsurance;
+        }
+
+        public double getCostInsurance() {
+            return costInsurance;
+        }
+
+        public String getNumberInsurance() {
+            return numberInsurance;
+        }
+
+        public boolean checkNumber(String numberInsurance) {
+            if (Pattern.matches("[а-я][0-9]{3}[а-я]{9}", numberInsurance)) {
+                numberInsurance = numberInsurance;
+            } else {
+                System.out.println("000000000");
+            }
+            return false;
+        }
+
+        public void checkNumberInsurance(String numberInsurance) {
+            if (validityInsurance.isBefore(LocalDate.now()) || validityInsurance.isEqual(LocalDate.now())) {
+                System.out.println("Вам необходимо оформить новую страховку");
+            }
+
+
+        }
+
+
+    }
+    public void reFuel(){
+        System.out.println("для заправки необходим " + fuelType + ", в количестве " + amountFuel + " литров.");
+    }
 
 }
